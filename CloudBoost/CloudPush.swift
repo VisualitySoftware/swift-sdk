@@ -44,5 +44,50 @@ public class CloudPush {
         
     }
     
+    public static func registerDeviceWithToken(token: NSData,
+                                               timezone: String,
+                                               channels: [String]?,
+                                               callback: (CloudBoostResponse)->Void)  {
     
+        var tokenString = NSString(format: "%@", token)
+        tokenString = tokenString.stringByReplacingOccurrencesOfString("<", withString: "")
+        tokenString = tokenString.stringByReplacingOccurrencesOfString(">", withString: "")
+        tokenString = tokenString.stringByReplacingOccurrencesOfString(" ", withString: "")
+
+        let device = CloudObject(tableName: "Device")
+        device.set("deviceToken", value: tokenString)
+        device.set("deviceOS", value: "iOS")
+        device.set("timezone", value: timezone)
+        if let channels = channels {
+            device.set("channels", value: channels)
+        }
+
+        device.save { response in
+            
+            callback(response)
+        }
+    }
+    
+    public static func unregisterDeviceWithToken(token: NSData,
+                                                 callback: (CloudBoostResponse)->Void)  {
+        
+        var tokenString = NSString(format: "%@", token)
+        tokenString = tokenString.stringByReplacingOccurrencesOfString("<", withString: "")
+        tokenString = tokenString.stringByReplacingOccurrencesOfString(">", withString: "")
+        tokenString = tokenString.stringByReplacingOccurrencesOfString(" ", withString: "")
+        
+        let query = CloudQuery(tableName: "Device")
+        try! query.equalTo("deviceToken", obj: tokenString)
+        try! query.findOne { (response) in
+            
+            if let device = response.object as? CloudObject {
+                
+                device.delete({ (response) in
+                    
+                    callback(response)
+                })
+            }
+        }
+        
+    }
 }
