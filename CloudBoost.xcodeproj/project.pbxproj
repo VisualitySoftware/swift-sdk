@@ -266,7 +266,7 @@
 		4B8F29407AD08011FCF757DA /* Pods-CloudBoost.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CloudBoost.release.xcconfig"; path = "Pods/Target Support Files/Pods-CloudBoost/Pods-CloudBoost.release.xcconfig"; sourceTree = "<group>"; };
 		A12A60847BBFAF7614AB9AAE /* Pods-CloudBoost.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CloudBoost.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CloudBoost/Pods-CloudBoost.debug.xcconfig"; sourceTree = "<group>"; };
 		AA034CE91CEF9B8B004A3820 /* CloudBoost.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CloudBoost.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		AA22BE0E1D0EB6F200ED3E14 /* CloudBoostTV.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CloudBoostTV.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA22BE0E1D0EB6F200ED3E14 /* CloudBoost.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CloudBoost.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA22BE101D0EB6F200ED3E14 /* CloudBoostTV.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CloudBoostTV.h; sourceTree = "<group>"; };
 		AA22BE121D0EB6F200ED3E14 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DDA7C915C64EE249132F9460 /* Pods-CloudBoostTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CloudBoostTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-CloudBoostTests/Pods-CloudBoostTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -352,7 +352,7 @@
 				22FFC8191C9733D10028EA61 /* CloudBoost.framework */,
 				22FFC8231C9733D10028EA61 /* CloudBoostTests.xctest */,
 				AA034CE91CEF9B8B004A3820 /* CloudBoost.framework */,
-				AA22BE0E1D0EB6F200ED3E14 /* CloudBoostTV.framework */,
+				AA22BE0E1D0EB6F200ED3E14 /* CloudBoost.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -544,7 +544,7 @@
 			);
 			name = CloudBoostTV;
 			productName = CloudBoostTV;
-			productReference = AA22BE0E1D0EB6F200ED3E14 /* CloudBoostTV.framework */;
+			productReference = AA22BE0E1D0EB6F200ED3E14 /* CloudBoost.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -1161,8 +1161,8 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.CloudBoost;
-				PRODUCT_MODULE_NAME = CloudBoostTV;
-				PRODUCT_NAME = CloudBoostTV;
+				PRODUCT_MODULE_NAME = CloudBoost;
+				PRODUCT_NAME = CloudBoost;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 3;
@@ -1182,8 +1182,8 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.CloudBoost;
-				PRODUCT_MODULE_NAME = CloudBoostTV;
-				PRODUCT_NAME = CloudBoostTV;
+				PRODUCT_MODULE_NAME = CloudBoost;
+				PRODUCT_NAME = CloudBoost;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
