@@ -554,7 +554,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0720;
-				LastUpgradeCheck = 0720;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "Randhir Singh";
 				TargetAttributes = {
 					22FFC8181C9733D10028EA61 = {
@@ -571,6 +571,7 @@
 					};
 					AA034CB41CEF9B8B004A3820 = {
 						DevelopmentTeam = ARUG6B6X5B;
+						LastSwiftMigration = 0800;
 					};
 					AA22BE0D1D0EB6F200ED3E14 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -1059,6 +1060,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 			};
 			name = Release;
 		};
@@ -1081,6 +1083,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.CloudBoostTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 			};
 			name = Release;
 		};
@@ -1118,6 +1121,7 @@
 				PRODUCT_NAME = CloudBoost;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 2.3;
 			};
 			name = Debug;
 		};
@@ -1140,6 +1144,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.CloudBoost;
 				PRODUCT_NAME = CloudBoost;
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 2.3;
 			};
 			name = Release;
 		};
@@ -1180,6 +1186,7 @@
 				PRODUCT_NAME = CloudBoostTV;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.2;
 			};

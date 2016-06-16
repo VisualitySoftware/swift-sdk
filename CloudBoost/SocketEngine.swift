@@ -211,9 +211,11 @@ public final class SocketEngine : NSObject, SocketEnginePollable, SocketEngineWe
         if client == nil {
             return (NSURL(), NSURL())
         }
+        
+        let urlString: String? = url.absoluteString
 
-        let urlPolling = NSURLComponents(string: url.absoluteString)!
-        let urlWebSocket = NSURLComponents(string: url.absoluteString)!
+        let urlPolling = NSURLComponents(string: urlString!)!
+        let urlWebSocket = NSURLComponents(string: urlString!)!
         var queryString = ""
         
         urlWebSocket.path = socketPath
