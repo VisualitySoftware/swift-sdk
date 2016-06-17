@@ -10,6 +10,7 @@ import Foundation
 
 public class CloudUser: CloudObject {
     
+    static var currentUser: CloudUser?
     
     public init(username: String, password: String){
         super.init(tableName: "User")
@@ -143,6 +144,8 @@ public class CloudUser: CloudObject {
             (response: CloudBoostResponse) in
             if response.success {
                 if let doc = response.object as? NSMutableDictionary {
+                    doc["_isModified"] = false
+                    doc["_modifiedColumns"] = nil
                     self.document = doc
                     self.setAsCurrentUser()
                 }
@@ -226,14 +229,11 @@ public class CloudUser: CloudObject {
         
     }
     
-    /**
-     *
-     * Reset Password
-     *
-     * @param email
-     * @param callbackObject
-     * @throws CloudBoostError
-     */
+    /// Reset the Password associated with a given email
+    ///
+    /// - parameter email: email addesso of the use requesting password reset
+    /// - parameter callback: a block returning a CloudBoostResponse with the response of the operation
+    ///
     public static func resetPassword(email: String, callback: (reponse: CloudBoostResponse)->Void) {
         let data = NSMutableDictionary()
         data["key"] = CloudApp.getAppKey()
@@ -249,14 +249,12 @@ public class CloudUser: CloudObject {
         })
     }
     
-    /**
-     *
-     * Change Password
-     *
-     * @param email
-     * @param callbackObject
-     * @throws CloudBoostError
-     */
+    /// Change the password the current logged user
+    ///
+    /// - parameter oldPassword: The previous password associaterd with this user
+    /// - parameter newPassword: The new password to be associated with this user
+    /// - parameter callback: The block called after the operation is completed, with an `CloudBoostResponse` containing the result
+    ///
     public func changePassword(oldPassword: String, newPassword: String, callback: (response: CloudBoostResponse)->Void) {
         let data = NSMutableDictionary()
         data["key"] = CloudApp.getAppKey()
@@ -278,14 +276,11 @@ public class CloudUser: CloudObject {
         })
     }
     
-    /**
-     *
-     * Add To Role
-     *
-     * @param role
-     * @param callbackObject
-     * @throws CloudBoostError
-     */
+    /// Add this user to a spcified CloudRole
+    ///
+    /// - parameter role: The role to be assigned to this user; must be of class CloudRole
+    /// - parameter callback: The block called after the operation has bee executed, returning an `CloudBoostResponse` with the result of the operation
+    ///
     public func addToRole(role: CloudRole, callback: (response: CloudBoostResponse)-> Void) throws{
         if role.getName() == nil {
             throw CloudBoostError.InvalidArgument
@@ -354,13 +349,24 @@ public class CloudUser: CloudObject {
         
         return false
     }
-    
-    public static func getCurrentUser<T where T:CloudObject>() -> T? {
+   
+    /// Get the current user logged in the system
+    ///
+    /// - returns: A CloudUser object contining the user currently logged in. If nil, no user is logged in in CLoudBoost
+    ///
+    public static func getCurrentUser<T where T:CloudUser>() -> T? {
+        
+        if self.currentUser != nil {
+            return self.currentUser as? T
+        }
+        
         let def = NSUserDefaults.standardUserDefaults()
         if let userDat = def.objectForKey("cb_current_user") as? NSData{
             if let doc = NSKeyedUnarchiver.unarchiveObjectWithData(userDat) as? NSMutableDictionary {
 
                 let user = CloudUser.cloudObjectFromDocumentDictionary(doc, documentType: T.self)
+                
+                self.currentUser = user as? T
 
                 return user as? T
             }
@@ -377,6 +383,8 @@ public class CloudUser: CloudObject {
     }
     
     public class func removeCurrentUser() {
+        
+        self.currentUser = nil
         
         let def = NSUserDefaults.standardUserDefaults()
         def.removeObjectForKey("cb_current_user")
