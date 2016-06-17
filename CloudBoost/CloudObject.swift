@@ -519,6 +519,8 @@ public class CloudObject: NSObject {
                 if(response.success){
                     if let newDocument = response.object {
                         self.document = newDocument as! NSMutableDictionary
+                        self.document["_isModified"] = false
+                        self.document["_modifiedColumns"] = nil
                     }
                 }
                 callback(response)
