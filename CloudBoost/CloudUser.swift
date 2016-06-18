@@ -184,7 +184,7 @@ public class CloudUser: CloudObject {
         CloudCommunications._request("POST", url: NSURL(string: url)!, params: data, callback: {
             (response: CloudBoostResponse) in
           
-            if let doc = response.object as? NSDictionary {
+            if let doc = response.object as? NSDictionary where response.success {
                 
                 if let user = CloudUser.cloudObjectFromDocumentDictionary(doc, documentType: self) as? CloudUser {
                     
