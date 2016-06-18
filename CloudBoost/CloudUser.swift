@@ -144,8 +144,7 @@ public class CloudUser: CloudObject {
             (response: CloudBoostResponse) in
             if response.success {
                 if let doc = response.object as? NSMutableDictionary {
-                    doc["_isModified"] = false
-                    doc["_modifiedColumns"] = nil
+                    self.resetModificationState()
                     self.document = doc
                     self.setAsCurrentUser()
                 }
@@ -376,6 +375,9 @@ public class CloudUser: CloudObject {
     }
     
     public func setAsCurrentUser(){
+        
+        CloudUser.currentUser = self
+        
         let def = NSUserDefaults.standardUserDefaults()
         let data = NSKeyedArchiver.archivedDataWithRootObject(self.document)
         def.setObject(data, forKey: "cb_current_user")
