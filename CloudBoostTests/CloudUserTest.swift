@@ -249,5 +249,47 @@ class CloudUserTest: XCTestCase {
         waitForExpectationsWithTimeout(30, handler: nil)
     }
     
+    // User login, fetch, save and logout
+    func testLostPassword() {
+        
+        _ = expectationWithDescription("get let user")
+        
+        let username = "michele.longhi@me.com"
+        let password = "111296"
+        let user = CloudUser(username: username, password: password)
+        user.setEmail(username)
+        
+        try! user.login { response in
+            
+            if response.success {
+                
+                user.set("favorites", value: ["60173"])
+            }
+            
+            user.save {response in
+                
+                if response.success {
+                    
+                    try! user.logout{ response in
+                        
+                        if response.success {
+                            
+                            let username = "michele.longhi@me.com"
+                            let password = "111296"
+                            let user = CloudUser(username: username, password: password)
+                            user.setEmail(username)
+                            
+                            try! user.login{ response in
+                            
+                                XCTAssert(response.success, "Login failed!")
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    
+        waitForExpectationsWithTimeout(200, handler: nil)
+    }
 
 }
