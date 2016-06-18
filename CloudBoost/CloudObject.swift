@@ -499,8 +499,11 @@ public class CloudObject: NSObject {
     
     // Log this cloud boost object
     public func log() {
-        print("-- CLoud Object --")
-        print(document)
+        
+        if CloudApp.isLogging() {
+            print("-- CLoud Object --")
+            print(document)
+        }
     }
     
     
@@ -519,8 +522,7 @@ public class CloudObject: NSObject {
                 if(response.success){
                     if let newDocument = response.object {
                         self.document = newDocument as! NSMutableDictionary
-                        self.document["_isModified"] = false
-                        self.document["_modifiedColumns"] = nil
+                        self.resetModificationState()
                     }
                 }
                 callback(response)
@@ -537,14 +539,19 @@ public class CloudObject: NSObject {
             callback(resp)
             return
         }
-        print("id : \(id)")
+        if CloudApp.isLogging() {
+            print("id : \(id)")
+        }
         let query = CloudQuery(tableName: self.get("_tableName")as!String)
         
         query.findById(id, callback: { resp in
             
             if let obj = resp.object?.firstObject as? CloudObject {
                 self.document = obj.document
-                print("Object updated")
+                self.resetModificationState()
+                if CloudApp.isLogging() {
+                    print("Object updated")
+                }
             }
             callback(resp)
         })
@@ -661,7 +668,7 @@ public class CloudObject: NSObject {
         let eventType = eventType.lowercaseString
         if CloudApp.SESSION_ID == nil {
             callback(error: "Invalid session ID")
-        }else{
+        }else if CloudApp.isLogging() {
             print("Using session ID: \(CloudApp.SESSION_ID)")
         }
         if eventType == "created" || eventType == "deleted" || eventType == "updated" {
@@ -689,14 +696,18 @@ public class CloudObject: NSObject {
             })
             
             CloudSocket.getSocket().on("connect", callback: { data, ack in
-                print("sessionID: \(CloudSocket.getSocket().sid)")
+                if CloudApp.isLogging() {
+                    print("sessionID: \(CloudSocket.getSocket().sid)")
+                }
                 payload["sessionId"] = CloudSocket.getSocket().sid
                 CloudSocket.getSocket().emit("join-object-channel", payload)
                 callback(error: nil)
             })
             
             CloudSocket.getSocket().connect(timeoutAfter: 15, withTimeoutHandler: {
-                print("Timeout")
+                if CloudApp.isLogging() {
+                    print("Timeout")
+                }
                 callback(error: "Timed out")
             })
             
@@ -721,7 +732,7 @@ public class CloudObject: NSObject {
         let tableName = tableName.lowercaseString
         if CloudApp.SESSION_ID == nil {
             callback(error: "Invalid session ID")
-        }else{
+        }else if CloudApp.isLogging() {
             print("Using session ID: \(CloudApp.SESSION_ID)")
         }
         var payloads = [NSMutableDictionary]()
@@ -755,7 +766,9 @@ public class CloudObject: NSObject {
             }
         }
         CloudSocket.getSocket().on("connect", callback: { data, ack in
-            print("sessionID: \(CloudSocket.getSocket().sid)")
+            if CloudApp.isLogging() {
+                print("sessionID: \(CloudSocket.getSocket().sid)")
+            }
             for (index,_) in payloads.enumerate() {
                 payloads[index]["sessionId"] = CloudSocket.getSocket().sid
                 CloudSocket.getSocket().emit("join-object-channel", payloads[index])
@@ -763,7 +776,9 @@ public class CloudObject: NSObject {
             callback(error: nil)
         })
         CloudSocket.getSocket().connect(timeoutAfter: 15, withTimeoutHandler: {
-            print("Timeout")
+            if CloudApp.isLogging() {
+                print("Timeout")
+            }
             callback(error: "Timed out")
         })
         
@@ -787,8 +802,10 @@ public class CloudObject: NSObject {
         
         let eventType = eventType.lowercaseString
         if query.getTableName() != tableName {
-            print(query.getTableName())
-            print(tableName)
+            if CloudApp.isLogging() {
+                print(query.getTableName())
+                print(tableName)
+            }
             callback(error: "CloudQuery TableName and CloudNotification TableName should be same")
             return
         }
@@ -829,13 +846,17 @@ public class CloudObject: NSObject {
                 }
             })
             CloudSocket.getSocket().on("connect", callback: { data, ack in
-                print("sessionID: \(CloudSocket.getSocket().sid)")
+                if CloudApp.isLogging() {
+                    print("sessionID: \(CloudSocket.getSocket().sid)")
+                }
                 payload["sessionId"] = CloudSocket.getSocket().sid
                 CloudSocket.getSocket().emit("join-object-channel", payload)
                 callback(error: nil)
             })
             CloudSocket.getSocket().connect(timeoutAfter: 15, withTimeoutHandler: {
-                print("Timeout")
+                if CloudApp.isLogging() {
+                    print("Timeout")
+                }
                 callback(error: "Timed out")
             })
             
@@ -910,6 +931,13 @@ public class CloudObject: NSObject {
         object.document = NSMutableDictionary(dictionary: dictionary as [NSObject : AnyObject], copyItems: true)
         
         return object
+    }
+    
+    func resetModificationState() {
+        
+        _modifiedColumns = []
+        document["_modifiedColumns"] = _modifiedColumns
+        document["_isModified"] = nil
     }
     
 }
