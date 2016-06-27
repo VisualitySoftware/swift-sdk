@@ -921,7 +921,11 @@ public class CloudObject: NSObject {
 
         var objectClass: CloudObject.Type
 
-        objectClass = CloudApp.objectClassForTableName(tableName)
+        if let type = type {
+            objectClass = type
+        } else {
+            objectClass = CloudApp.objectClassForTableName(tableName)
+        }
         
         let object = objectClass.init(tableName: tableName)
         object.document = NSMutableDictionary(dictionary: dictionary as [NSObject : AnyObject], copyItems: true)

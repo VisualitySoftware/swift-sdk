@@ -109,6 +109,7 @@ public class CloudUser: CloudObject {
             // Save the user if he has been successfully logged in
             if(response.status == 200){
                 if let doc = response.object as? NSMutableDictionary{
+                    self.resetModificationState()
                     self.document = doc
                     self.setAsCurrentUser()
                 }
@@ -363,7 +364,7 @@ public class CloudUser: CloudObject {
         if let userDat = def.objectForKey("cb_current_user") as? NSData{
             if let doc = NSKeyedUnarchiver.unarchiveObjectWithData(userDat) as? NSMutableDictionary {
 
-                let user = CloudUser.cloudObjectFromDocumentDictionary(doc, documentType: T.self)
+                let user = T.cloudObjectFromDocumentDictionary(doc, documentType: T.self)
                 
                 self.currentUser = user as? T
 
@@ -382,6 +383,7 @@ public class CloudUser: CloudObject {
         let data = NSKeyedArchiver.archivedDataWithRootObject(self.document)
         def.setObject(data, forKey: "cb_current_user")
         
+        def.synchronize()
     }
     
     public class func removeCurrentUser() {
